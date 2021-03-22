@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo</title>
+</head>
+<body>
+    <h1>Todo</h1>
+    <hr />
+    <ul>
+        {% for todo in todos %}
+            <li>
+                <form action="{% url 'todo_app:change_status' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="checkbox" name="checked" {% if todo.status %}checked{% endif %} />
+                    <button>Update</button>
+                    <button formaction="{% url 'todo_app:delete_todo' %}">Delete</button>
+                    {{ todo.text }}
+                    <input type="hidden" name="pk" value="{{ todo.pk }}" />
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+    <hr>
+    <form action="." method="POST">
+        {% csrf_token %}
+        <input type="text" name="text" placeholder="Write your next todo item here!" />
+        <button>Create Todo</button>
+    </form>
+    <hr>
+    <a href="{% url 'todo_app:completed_todos' %}">Completed Todos</a>
+</body>
+</html>
+
